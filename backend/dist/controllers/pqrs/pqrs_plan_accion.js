@@ -82,7 +82,8 @@ const updatePlanPqrs = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.updatePlanPqrs = updatePlanPqrs;
 exports.envioCorreoPlan = nodemailer_1.default.createTransport({
-    host: "smtp.office365.com",
+    service: "gmail",
+    host: "smtp.gmail.com",
     port: 587,
     secure: false,
     auth: {

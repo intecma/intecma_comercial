@@ -33,7 +33,7 @@ router.post('/plan_accion_correo', function (req, res) {
 
         <b>Fecha de creacion:</b> ${body.ppa_fecha_inicio}<br>
         <b>Fecha de cumplimiento:</b> ${body.ppa_fecha_cumplimiento}<br>
-        <b>Decripcion del plan accion:</b> ${body.ppa_descripcion}<br><br>
+        <b>Descripción del plan acción:</b> ${body.ppa_descripcion}<br><br>
         
         Se solicita amablemente que se realice este plan antes de la fecha de cumplimiento establecida: <b>${body.ppa_fecha_cumplimiento}.</b><br><br>
 
