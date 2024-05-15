@@ -1,0 +1,9 @@
+PORT = '3000'
+
+DB_HOST= '192.168.1.17'
+DB_NAME= 'pruebas'
+DB_USER= 'root'
+DB_PASS= ''
+
+EMAIL = 'sjaimes@uniempresarial.edu.co'
+EMAIL_PASSWORD= '19752708'
