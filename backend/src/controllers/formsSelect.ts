@@ -42,6 +42,27 @@ export const getProductoOption = async (req: Request, res: Response) => {
     res.json(listProducto)
 }
 
+export const getInfoProducto = async (req: Request, res: Response) => {
+    const {id} = req.params;
+    const query = 'SELECT pp.pqrs_productos_id, pr.prod_ref, pr.prod_descripcion, pp.lote, pp.cantidad FROM pqrs_productos pp INNER JOIN pqrs p on pp.pqrs_id = p.pqrs_id '
+    +'INNER JOIN productos pr on pp.prod_id = pr.prod_id where p.pqrs_id = '+id+';'
+
+    const listProducto = await sequelize.query(query,{
+        type:QueryTypes.SELECT
+    })
+
+    if (listProducto) {
+
+        res.json(listProducto)
+
+    } else {
+        res.status(404).json({
+            msg: 'No existe PQRS'
+        })
+    }
+}
+
+
 export const getPqrsCausaOption = async (req: Request, res: Response) => {
     const listCausas = await Pqrs_Causa.findAll({
         order: [['pcr_causa', 'ASC']]

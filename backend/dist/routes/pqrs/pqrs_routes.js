@@ -11,7 +11,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const pqrs_plan_accion_1 = require("../../controllers/pqrs/pqrs_plan_accion");
+const pqrs_producto_1 = require("../../controllers/pqrs/pqrs_producto");
+const formsSelect_1 = require("../../controllers/formsSelect");
 const router = (0, express_1.Router)();
+//Pqrs productos
+router.post('/pqrs_producto/', pqrs_producto_1.postPqrsProducto);
+router.get('/pqrs_productos/:id', formsSelect_1.getInfoProducto);
+router.get('/pqrs_producto/:id', pqrs_producto_1.getPqrsProducto);
+router.put('/pqrs_producto/:id', pqrs_producto_1.updatePqrsProducto);
+//Pqrs Planes de accion
 router.get('/planes_accion/:id', pqrs_plan_accion_1.getPqrsPlanes);
 router.post('/plan_accion/', pqrs_plan_accion_1.postPlanPqrs);
 router.get('/plan_accion/:id', pqrs_plan_accion_1.getPlanPqrs);
