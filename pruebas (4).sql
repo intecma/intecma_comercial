@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-05-2024 a las 15:39:15
+-- Tiempo de generación: 23-05-2024 a las 18:49:47
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -701,12 +701,9 @@ INSERT INTO `cliente_zona` (`cz_id`, `cz_nombre`, `c_c_id`) VALUES
 --
 
 CREATE TABLE `pqrs` (
-  `pqrs_id` int(5) NOT NULL,
+  `pqrs_id` int(8) NOT NULL,
   `pqrs_fecha_recepcion` date NOT NULL,
   `cli_id` int(5) NOT NULL,
-  `prod_id` int(5) NOT NULL,
-  `pqrs_lote` varchar(100) NOT NULL,
-  `pqrs_prod_cantidad` int(8) NOT NULL,
   `pqrs_doc` varchar(100) NOT NULL,
   `pqrs_evidencia` varchar(500) DEFAULT NULL,
   `pqrs_descripcion` varchar(5000) NOT NULL,
@@ -724,10 +721,10 @@ CREATE TABLE `pqrs` (
 -- Volcado de datos para la tabla `pqrs`
 --
 
-INSERT INTO `pqrs` (`pqrs_id`, `pqrs_fecha_recepcion`, `cli_id`, `prod_id`, `pqrs_lote`, `pqrs_prod_cantidad`, `pqrs_doc`, `pqrs_evidencia`, `pqrs_descripcion`, `pqrs_analisis`, `costo`, `pqrs_causa_raiz_id`, `carg_id`, `pt_id`, `pqrs_fecha_respuesta`, `pqrs_documento_cruce`, `pqrs_estado`) VALUES
-(1, '2024-05-08', 1, 1, 'Lote-001', 10, 'Documento-001', 'http://192.168.1.17:3000/EvidenciaPqrs1.jpg?t=1715693603676', 'Esta es una descripción de prueba para la PQRS 1.', 'Análisis de la PQRS 1.', '100.000', 1, 5, 1, '2024-05-14', 'Documento-002', 2),
-(2, '2024-05-08', 112, 69, '230701B', 1, 'FV', 'http://192.168.1.17:3000/EvidenciaPqrs20.jpg?t=1715276495199', 'El cliente manifiesta que en uno de los paquetes del producto salio un cabello, el cliente solicita que se transmita el reclamo al proveedor pero no quieren cambio, solo realizan la observación', 'Se realizó reclamo al proveedor donde manifiestan que cuentan con estrictos controles de calidad pero que sin embargo van a reforzar dichos controles para que este tipo de situaciones no se vuelvan a presentar.', '0', 2, 15, 3, '2024-05-09', 'N.A', 2),
-(3, '2024-05-08', 169, 30, 'N.A', 6, 'FV', 'http://192.168.1.17:3000/EvidenciaPqrs21.png?t=1715276463015', 'El cliente recibió el pedido y al momento de abrirlo una de las cajas (display) estaba en mal estado, según reporta el cliente al parecer la caja externa colapsó por manipulación e hizo que el display sufriera avería, el cliente reporta la situación para que revisemos el proceso pero va a dejar la mercancía pues vende los yesos por unidad.', 'Desafortunadamente el cliente no dejó observación en la guía al momento de la recepción pues no era evidente la avería, se refuerza a través del comercial al cliente que en este tipo de situaciones se debe dejar la anotación en la guía para proceder a la reclamación con la transportadora.', '0', 4, 13, 3, '2024-05-09', 'N.A', 2);
+INSERT INTO `pqrs` (`pqrs_id`, `pqrs_fecha_recepcion`, `cli_id`, `pqrs_doc`, `pqrs_evidencia`, `pqrs_descripcion`, `pqrs_analisis`, `costo`, `pqrs_causa_raiz_id`, `carg_id`, `pt_id`, `pqrs_fecha_respuesta`, `pqrs_documento_cruce`, `pqrs_estado`) VALUES
+(1, '2024-05-08', 1, 'Documento-001', 'http://192.168.1.18:3000/EvidenciaPqrs1.jpg?t=1715693603676', 'Esta es una descripción de prueba para la PQRS 1.', 'Análisis de la PQRS 1.', '100.000', 1, 5, 1, '2024-05-14', 'Documento-002', 2),
+(65, '2024-05-08', 112, 'FV', 'http://192.168.1.18:3000/EvidenciaPqrs20.jpg?t=1715276495199', 'El cliente manifiesta que en uno de los paquetes del producto salio un cabello, el cliente solicita que se transmita el reclamo al proveedor pero no quieren cambio, solo realizan la observación', 'Se realizó reclamo al proveedor donde manifiestan que cuentan con estrictos controles de calidad pero que sin embargo van a reforzar dichos controles para que este tipo de situaciones no se vuelvan a presentar.', '0', 2, 15, 3, '2024-05-09', 'N.A', 2),
+(66, '2024-05-08', 169, 'FV', 'http://192.168.1.18:3000/EvidenciaPqrs21.png?t=1715276463015', 'El cliente recibió el pedido y al momento de abrirlo una de las cajas (display) estaba en mal estado, según reporta el cliente al parecer la caja externa colapsó por manipulación e hizo que el display sufriera avería, el cliente reporta la situación para que revisemos el proceso pero va a dejar la mercancía pues vende los yesos por unidad.', 'Desafortunadamente el cliente no dejó observación en la guía al momento de la recepción pues no era evidente la avería, se refuerza a través del comercial al cliente que en este tipo de situaciones se debe dejar la anotación en la guía para proceder a la reclamación con la transportadora.', '0', 4, 13, 3, '2024-05-09', 'N.A', 2);
 
 -- --------------------------------------------------------
 
@@ -789,6 +786,7 @@ CREATE TABLE `pqrs_plan_accion` (
   `ppa_descripcion` varchar(5000) NOT NULL,
   `ppa_fecha_cumplimiento` date DEFAULT NULL,
   `carg_id` int(5) NOT NULL,
+  `ppa_observaciones` varchar(5000) DEFAULT NULL,
   `pqrs_id` int(5) NOT NULL,
   `ppa_estado` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -797,9 +795,35 @@ CREATE TABLE `pqrs_plan_accion` (
 -- Volcado de datos para la tabla `pqrs_plan_accion`
 --
 
-INSERT INTO `pqrs_plan_accion` (`ppa_id`, `ppa_fecha_inicio`, `ppa_descripcion`, `ppa_fecha_cumplimiento`, `carg_id`, `pqrs_id`, `ppa_estado`) VALUES
-(1, '2024-05-08', 'REALIZAR RECLAMO AL PROVEEDOR', '2024-05-08', 0, 2, 'CERRADO'),
-(2, '2024-05-08', 'INFORMAR AL CLIENTE RESPUESTA DEL PROVEEDOR', '2024-05-10', 0, 2, 'PENDIENTE');
+INSERT INTO `pqrs_plan_accion` (`ppa_id`, `ppa_fecha_inicio`, `ppa_descripcion`, `ppa_fecha_cumplimiento`, `carg_id`, `ppa_observaciones`, `pqrs_id`, `ppa_estado`) VALUES
+(1, '2024-05-08', 'REALIZAR RECLAMO AL PROVEEDOR', '2024-05-08', 9, NULL, 65, 'CERRADO'),
+(2, '2024-05-08', 'INFORMAR AL CLIENTE RESPUESTA DEL PROVEEDOR', '2024-05-10', 5, NULL, 65, 'PENDIENTE');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pqrs_productos`
+--
+
+CREATE TABLE `pqrs_productos` (
+  `pqrs_productos_id` int(8) NOT NULL,
+  `pqrs_id` int(5) NOT NULL,
+  `prod_id` int(8) NOT NULL,
+  `lote` varchar(100) NOT NULL,
+  `cantidad` int(8) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pqrs_productos`
+--
+
+INSERT INTO `pqrs_productos` (`pqrs_productos_id`, `pqrs_id`, `prod_id`, `lote`, `cantidad`) VALUES
+(1, 1, 1, '245', 5),
+(2, 1, 20, '255', 12),
+(3, 1, 12, '48', 45),
+(4, 66, 30, 'N.A', 6),
+(5, 1, 4, '852', 26),
+(14, 65, 69, '230701B', 1);
 
 -- --------------------------------------------------------
 
@@ -830,7 +854,7 @@ INSERT INTO `pqrs_tipologia` (`pt_id`, `pt_tipologia`) VALUES
 --
 
 CREATE TABLE `productos` (
-  `prod_id` int(5) NOT NULL,
+  `prod_id` int(8) NOT NULL,
   `prod_ref` varchar(100) NOT NULL,
   `prod_descripcion` varchar(500) NOT NULL,
   `prod_presentacion` varchar(500) NOT NULL,
@@ -962,7 +986,6 @@ ALTER TABLE `cliente_zona`
 ALTER TABLE `pqrs`
   ADD PRIMARY KEY (`pqrs_id`),
   ADD KEY `cli_id` (`cli_id`),
-  ADD KEY `prod_id` (`prod_id`),
   ADD KEY `pqrs_causa` (`pqrs_causa_raiz_id`),
   ADD KEY `carg_id` (`carg_id`),
   ADD KEY `pt_id` (`pt_id`),
@@ -987,6 +1010,12 @@ ALTER TABLE `pqrs_plan_accion`
   ADD PRIMARY KEY (`ppa_id`),
   ADD KEY `carg_id` (`carg_id`),
   ADD KEY `pqrs_id` (`pqrs_id`);
+
+--
+-- Indices de la tabla `pqrs_productos`
+--
+ALTER TABLE `pqrs_productos`
+  ADD PRIMARY KEY (`pqrs_productos_id`);
 
 --
 -- Indices de la tabla `pqrs_tipologia`
@@ -1038,7 +1067,7 @@ ALTER TABLE `cliente_zona`
 -- AUTO_INCREMENT de la tabla `pqrs`
 --
 ALTER TABLE `pqrs`
-  MODIFY `pqrs_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `pqrs_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `pqrs_causa_raiz`
@@ -1059,6 +1088,12 @@ ALTER TABLE `pqrs_plan_accion`
   MODIFY `ppa_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT de la tabla `pqrs_productos`
+--
+ALTER TABLE `pqrs_productos`
+  MODIFY `pqrs_productos_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
 -- AUTO_INCREMENT de la tabla `pqrs_tipologia`
 --
 ALTER TABLE `pqrs_tipologia`
@@ -1068,7 +1103,7 @@ ALTER TABLE `pqrs_tipologia`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `prod_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `prod_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- Restricciones para tablas volcadas
@@ -1095,7 +1130,6 @@ ALTER TABLE `pqrs`
   ADD CONSTRAINT `pqrs_causa` FOREIGN KEY (`pqrs_causa_raiz_id`) REFERENCES `pqrs_causa_raiz` (`pcr_id`),
   ADD CONSTRAINT `pqrs_estado` FOREIGN KEY (`pqrs_estado`) REFERENCES `pqrs_estado` (`pe_id`),
   ADD CONSTRAINT `pqrs_ibfk_1` FOREIGN KEY (`cli_id`) REFERENCES `cliente` (`cli_id`),
-  ADD CONSTRAINT `prod_id` FOREIGN KEY (`prod_id`) REFERENCES `productos` (`prod_id`),
   ADD CONSTRAINT `pt_id` FOREIGN KEY (`pt_id`) REFERENCES `pqrs_tipologia` (`pt_id`);
 
 --
