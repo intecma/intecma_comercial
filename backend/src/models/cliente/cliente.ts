@@ -1,5 +1,5 @@
 import {DataTypes} from 'sequelize'
-import db from '../db/connection';
+import db from '../../db/connection';
 
 const Cliente = db.define('cliente',{
     cli_id:{
@@ -22,8 +22,11 @@ const Cliente = db.define('cliente',{
     cli_telefono:{
         type: DataTypes.STRING
     },
+    cli_ciudad:{
+        type: DataTypes.INTEGER
+    },
     cli_zona:{
-        type: DataTypes.STRING
+        type: DataTypes.INTEGER
     },
     cli_asesor_nombre:{
         type: DataTypes.STRING

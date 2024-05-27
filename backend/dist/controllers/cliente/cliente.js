@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePQRS = exports.postPQRS = exports.getCliente = exports.getClientes = void 0;
-const connection_1 = __importDefault(require("../db/connection"));
-const cliente_1 = __importDefault(require("../models/cliente"));
+exports.updateCliente = exports.postCliente = exports.getCliente = exports.getClientes = void 0;
+const connection_1 = __importDefault(require("../../db/connection"));
+const cliente_1 = __importDefault(require("../../models/cliente/cliente"));
 const sequelize_1 = require("sequelize");
 const getClientes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = `SELECT c.cli_id, c.cli_nombre, c.cli_nit, cc.cli_cla_clasificacion,concat(cci.c_c_nombre,"/",cz.cz_nombre) as zona,` +
@@ -39,7 +39,7 @@ const getCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getCliente = getCliente;
-const postPQRS = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const postCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
         yield cliente_1.default.create(body);
@@ -54,14 +54,14 @@ const postPQRS = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
 });
-exports.postPQRS = postPQRS;
-const updatePQRS = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.postCliente = postCliente;
+const updateCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     const { id } = req.params;
     try {
-        const pqrs = yield cliente_1.default.findByPk(id);
-        if (pqrs) {
-            pqrs.update(body);
+        const cliente = yield cliente_1.default.findByPk(id);
+        if (cliente) {
+            cliente.update(body);
             res.json({
                 msg: 'El PQRS se actualizo exitosamente'
             });
@@ -79,4 +79,4 @@ const updatePQRS = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-exports.updatePQRS = updatePQRS;
+exports.updateCliente = updateCliente;
