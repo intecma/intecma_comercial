@@ -4,6 +4,7 @@ import Usuarios from '../models/usuario';
 import jwt from 'jsonwebtoken'
 import sequelize from '../db/connection';
 import { QueryTypes } from 'sequelize';
+import { jwtDecode } from 'jwt-decode';
 
 export const postUser = async(req: Request, res: Response) => {
 
@@ -83,6 +84,18 @@ export const loginUsuario= async (req: Request, res: Response)=>{
 export const permisosUsuario = async (req: Request, res: Response)=>{
     const {pagina} = req.body
     const headerToken = req.headers['authorization'];
+
+    const bearerToken = headerToken?.slice(7);
+
+    let rol;
+
+    if(bearerToken){
+        rol = jwtDecode(bearerToken);
+    } else{
+        res.status(402).json({
+            
+        })
+    }
     
     const query = `SELECT ar.rol_nombre, aru.ruta_nombre FROM acc_roles ar JOIN acc_permisos ap `+
     `on ar.rol_id = ap.rol_id join acc_rutas aru on aru.ruta_id = ap.ruta_id where aru.ruta_nombre = '${pagina}';`

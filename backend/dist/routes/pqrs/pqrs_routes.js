@@ -8,17 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const pqrs_plan_accion_1 = require("../../controllers/pqrs/pqrs_plan_accion");
 const pqrs_producto_1 = require("../../controllers/pqrs/pqrs_producto");
 const formsSelect_1 = require("../../controllers/formsSelect");
+const validad_token_1 = __importDefault(require("../validad_token"));
 const router = (0, express_1.Router)();
 //Pqrs productos
 router.post('/pqrs_producto/', pqrs_producto_1.postPqrsProducto);
 router.get('/pqrs_productos/:id', formsSelect_1.getInfoProducto);
 router.get('/pqrs_producto/:id', pqrs_producto_1.getPqrsProducto);
 router.put('/pqrs_producto/:id', pqrs_producto_1.updatePqrsProducto);
+router.delete('/pqrs_producto/:id', pqrs_producto_1.deletePqrsProducto);
 //Pqrs Planes de accion
 router.get('/planes_accion/:id', pqrs_plan_accion_1.getPqrsPlanes);
 router.post('/plan_accion/', pqrs_plan_accion_1.postPlanPqrs);
@@ -37,7 +42,14 @@ router.post('/plan_accion_correo', function (req, res) {
 
         acción para atender la <b>PQRS ${body.pqrs_id}</b> <br><br>
 
-        A continuación, se proporcionan los detalles del plan de acción:<br><br>
+        A continuación, se proporcionan los detalles tanto de la PQRS y del plan de Acción:<br><br>
+
+        <b>PQRS ${body.pqrs_id}</b>:<br><br>
+
+        <b>Cliente:</b> ${body.cli_nombre}<br>
+        <b>Descripción:</b> ${body.pqrs_descripcion}<br><br>
+
+        <b>Plan de Acción:</b><br><br>
 
         <b>Fecha de creacion:</b> ${body.ppa_fecha_inicio}<br>
         <b>Fecha de cumplimiento:</b> ${body.ppa_fecha_cumplimiento}<br>
@@ -45,6 +57,8 @@ router.post('/plan_accion_correo', function (req, res) {
         <b>Observaciones del plan acción:</b> ${body.ppa_observaciones}<br><br>
         
         Se solicita amablemente que se realice este plan antes de la fecha de cumplimiento establecida: <b>${body.ppa_fecha_cumplimiento}.</b><br><br>
+
+        Para ver el Plan de Acción de la <b>PQRS ${body.pqrs_id}</b> ingrese al siguiente link <a href="${process.env.URL_PLAN_PQRS}${body.pqrs_id}">Plan de Acción PQRS ${body.pqrs_id}</a><br><br>
 
         Agradecemos su atención y compromiso con nuestro servicio.<br><br>
 
@@ -56,12 +70,12 @@ router.post('/plan_accion_correo', function (req, res) {
         res.status(200).json({ ok: true, message: "enviado" });
     });
 });
-router.post('/pqrs_creada', function (req, res) {
+router.post('/pqrs_creada', validad_token_1.default, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { body } = req;
         yield pqrs_plan_accion_1.envioCorreoPlan.sendMail({
             from: `Creacion Nuevas PQRS ${process.env.EMAIL}`,
-            to: `${process.env.DIR_COMERCIAL}, ${process.env.ADMINISTRACION}`,
+            to: `${process.env.DIR_COMERCIAL}, ${process.env.ADMINISTRACION}, ${process.env.GERENCIA}`,
             subject: `Creacion de la PQRS ${body.pqrs_id}`,
             html: `${body.saludos}.<br><br>
 

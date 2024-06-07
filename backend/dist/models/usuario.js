@@ -17,7 +17,7 @@ const Usuarios = connection_1.default.define('usuarios', {
     carg_id: {
         type: sequelize_1.DataTypes.NUMBER
     },
-    usu_contraseña: {
+    usu_contrasena: {
         type: sequelize_1.DataTypes.STRING
     },
     rol_id: {

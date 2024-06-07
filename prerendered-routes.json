@@ -1,8 +1,18 @@
 {
   "routes": [
     "/AgregarClientes",
-    "/agregarPqrs",
+    "/AgregarModulos",
+    "/AgregarPqrs",
+    "/AgregarProductos",
+    "/AgregarRoles",
+    "/AgregarUsuarios",
     "/Clientes",
-    "/PQRS"
+    "/Login",
+    "/Modulos",
+    "/NoTienePermisos",
+    "/Pqrs",
+    "/Productos",
+    "/Roles",
+    "/Usuarios"
   ]
 }

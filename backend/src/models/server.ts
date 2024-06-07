@@ -1,12 +1,14 @@
 import express, {Application, Request, Response} from 'express';
 import cors from 'cors';
-import routesUsuarios from '../routes/usuario'
+import routesUsuarios from '../routes/acceso/usuario'
+import routesAcceso from '../routes/acceso/acc_routes'
 import routesPqrs from '../routes/pqrs/pqrs';
 import routesPqrsRoutes from '../routes/pqrs/pqrs_routes';
 import routesCliente from '../routes/cliente/cliente';
 import routesClienteRoutes from '../routes/cliente/cliente_routes';
 import routesForms from '../routes/formsSelect';
 import routesCargo from '../routes/cargo';
+import routesProducto from '../routes/producto'
 import db from '../db/connection'
 
 class Server{
@@ -36,11 +38,13 @@ class Server{
             })
         })
         this.app.use('/api/usuarios', routesUsuarios);
+        this.app.use('/api/accesos', routesAcceso);
         this.app.use('/api/pqrs', routesPqrs);
         this.app.use('/api/pqrs_apis', routesPqrsRoutes);
         this.app.use('/api/cliente', routesCliente);
         this.app.use('/api/cliente_apis', routesClienteRoutes);
         this.app.use('/api/cargo', routesCargo);
+        this.app.use('/api/producto', routesProducto);
         this.app.use('/api/seleccione', routesForms);
     }
 
