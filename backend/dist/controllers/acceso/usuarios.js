@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.permisosUsuario = exports.loginUsuario = exports.updateUser = exports.postUser = exports.getUser = exports.getUsers = void 0;
+exports.permisosUsuario = exports.loginUsuario = exports.updateUser = exports.postUser = exports.getUser = exports.getUserInfo = exports.getUsers = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const usuario_1 = __importDefault(require("../../models/acceso/usuario"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -36,6 +36,43 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUsers = getUsers;
+const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const query = `SELECT usu.username, c.carg_nombre, c.carg_correo FROM usuarios usu join cargos c on c.carg_id=usu.carg_id join acc_roles ar 
+    on ar.rol_id = usu.rol_id WHERE usu.usu_id = ${id} ORDER BY usu.username,usu.usu_status;`;
+    try {
+        const user = yield connection_1.default.query(query, {
+            type: sequelize_1.QueryTypes.SELECT,
+        });
+        if (user && user.length > 0) {
+            res.json(user);
+        }
+        else {
+            res.status(404).json({
+                msg: `No existe ningun usuario con el id: ${id}`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: 'Error en el servidor al enviar la info. del usuario'
+        });
+    }
+});
+exports.getUserInfo = getUserInfo;
+const getUserData = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = `SELECT usu.username, c.carg_nombre, c.carg_correo FROM usuarios usu join cargos c on c.carg_id=usu.carg_id join acc_roles ar 
+    on ar.rol_id = usu.rol_id WHERE usu.usu_id = ${id} ORDER BY usu.username,usu.usu_status;`;
+    const user = yield connection_1.default.query(query, {
+        type: sequelize_1.QueryTypes.SELECT,
+    });
+    if (user) {
+        return user;
+    }
+    else {
+        return false;
+    }
+});
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const usuario = yield usuario_1.default.findByPk(id);
@@ -139,15 +176,19 @@ const loginUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             msg: `El usuario ${username} esta inactivo hable con el administrador`
         });
     }
+    const [userInfo] = yield getUserData(user.usu_id);
     const rol = user.rol_id;
     //Generamos Token
     const token = jsonwebtoken_1.default.sign({
         "username": `${username}`,
+        "codigo": user.usu_id, //se pone 'codigo' para que no sea evidente que es el id del usuario
         "rol": `${rol}`
     }, process.env.SECRET_KEY || 'intecma2024', {
     //expiresIn: '10000'
     });
-    res.json({ token });
+    res.json({ token,
+        userInfo
+    });
 });
 exports.loginUsuario = loginUsuario;
 const permisosUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

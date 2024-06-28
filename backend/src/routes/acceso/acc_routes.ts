@@ -2,10 +2,14 @@ import {Router} from 'express';
 import { getRol, getRoles, postRol, updateRol } from '../../controllers/acceso/roles';
 import { deletePermiso, getPermiso, getPermisosByRol, postPermisos, updatePermiso } from '../../controllers/acceso/permisos';
 import { getComponentes, getModulo, getModulos, postModulo, updateModulo } from '../../controllers/acceso/modulo';
-import { getRuta, getRutasByComponente, postRuta, updateRuta } from '../../controllers/acceso/ruta';
+import { deleteRuta, getRuta, getRutasByComponente, postRuta, updateRuta } from '../../controllers/acceso/ruta';
+import { getUserInfo } from '../../controllers/acceso/usuarios';
 
 
 const router = Router();
+
+//Usuarios
+router.get('/usuario/:id', getUserInfo);
 
 //Roles
 router.get('/roles', getRoles);
@@ -35,7 +39,6 @@ router.get('/rutas/:id', getRutasByComponente);
 router.get('/ruta/:id', getRuta);
 router.post('/rutas', postRuta);
 router.put('/rutas/:id', updateRuta);
-
-
+router.delete('/rutas/:id', deleteRuta);
 
 export default router;

@@ -24,6 +24,45 @@ export const getUsers = async (req: Request, res: Response) => {
     }
 }
 
+export const getUserInfo = async (req: Request, res: Response) => {
+    const {id} = req.params;
+
+    const query = `SELECT usu.username, c.carg_nombre, c.carg_correo FROM usuarios usu join cargos c on c.carg_id=usu.carg_id join acc_roles ar 
+    on ar.rol_id = usu.rol_id WHERE usu.usu_id = ${id} ORDER BY usu.username,usu.usu_status;`
+
+    try {
+        const user = await sequelize.query(query,{
+            type: QueryTypes.SELECT,
+        });
+        if(user&&user.length>0){
+            res.json(user);
+        }else{
+            res.status(404).json({
+                msg: `No existe ningun usuario con el id: ${id}`
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            msg: 'Error en el servidor al enviar la info. del usuario'
+        });
+    }
+}
+
+const getUserData = async (id:any)=>{
+    const query = `SELECT usu.username, c.carg_nombre, c.carg_correo FROM usuarios usu join cargos c on c.carg_id=usu.carg_id join acc_roles ar 
+    on ar.rol_id = usu.rol_id WHERE usu.usu_id = ${id} ORDER BY usu.username,usu.usu_status;`
+
+    const user = await sequelize.query(query,{
+        type: QueryTypes.SELECT,
+    });
+
+    if(user){
+        return user;
+    }else{
+        return false;
+    }
+}
+
 export const getUser = async (req: Request, res: Response) => {
     const { id } = req.params;
 
@@ -93,8 +132,6 @@ export const updateUser = async (req: Request, res: Response) => {
             usu_status: usu_status
         }
     }
-
-
     try {
 
         const usuario = await Usuarios.findByPk(id)
@@ -145,16 +182,22 @@ export const loginUsuario = async (req: Request, res: Response) => {
         })
     }
 
+    const [userInfo] = await getUserData(user.usu_id);
+
+
     const rol = user.rol_id
     //Generamos Token
     const token = jwt.sign({
         "username": `${username}`,
+        "codigo":user.usu_id,//se pone 'codigo' para que no sea evidente que es el id del usuario
         "rol": `${rol}`
     }, process.env.SECRET_KEY || 'intecma2024', {
         //expiresIn: '10000'
     });
 
-    res.json({ token });
+    res.json({ token,
+        userInfo
+     });
 }
 
 export const permisosUsuario = async (req: Request, res: Response) => {
