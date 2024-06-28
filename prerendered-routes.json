@@ -1,12 +1,16 @@
 {
   "routes": [
+    "/AgregarCiudades",
     "/AgregarClientes",
+    "/AgregarEstudioCreditos",
     "/AgregarModulos",
     "/AgregarPqrs",
     "/AgregarProductos",
     "/AgregarRoles",
     "/AgregarUsuarios",
+    "/Ciudades",
     "/Clientes",
+    "/EstudioCreditos",
     "/Login",
     "/Modulos",
     "/NoTienePermisos",
