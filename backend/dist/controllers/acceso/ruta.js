@@ -103,7 +103,7 @@ const deleteRuta = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const ruta = yield ruta_1.default.findByPk(id);
         if (ruta) {
-            yield ruta_1.default.destroy();
+            yield ruta.destroy();
             res.json({
                 msg: `Ruta eliminada exitosamente ${ruta.ruta_nombre}`
             });

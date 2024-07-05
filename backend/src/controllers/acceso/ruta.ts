@@ -94,7 +94,7 @@ export const deleteRuta = async (req: Request, res: Response)=>{
     try {
         const ruta = await Rutas.findByPk(id);
         if(ruta){
-            await Rutas.destroy();
+            await ruta.destroy();
 
             res.json({
                 msg: `Ruta eliminada exitosamente ${ruta.ruta_nombre}`
